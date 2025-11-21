@@ -25,9 +25,15 @@
     </header>
 
     <section
-      class="relative h-[85vh] flex items-center justify-center bg-cover bg-center"
-      style="background-image: url('images/Fassadenansicht_low_res.jpg')"
+      id="hero"
+      class="relative h-[85vh] flex items-center justify-center overflow-hidden"
     >
+      <!-- Slideshow layers (inserted here so overlay/content sit above) -->
+      <div class="absolute inset-0 hero-slides" aria-hidden="true">
+         <!--<div class="hero-slide" style="background-image: url('images/Fassadenansicht_low_res.jpg')"></div>-->
+        <div class="hero-slide" style="background-image: url('images/Hagelberger_DG_Wohnbereich_quer_low_res.jpg')"></div>
+      </div>
+
       <div class="absolute inset-0 bg-black/50"></div>
       <div class="relative z-10 max-w-4xl mx-auto px-6 text-center text-white">
         <h1 class="text-4xl md:text-6xl font-light tracking-wide mb-6">

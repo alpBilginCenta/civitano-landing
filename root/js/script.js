@@ -11,6 +11,7 @@ function initializeWebsite() {
     initializeFormHandling();
     initializeModals();
     initializeScrollReveal();
+    initializeHeroSlideshow();
     initializeLazyLoading();
 }
 
@@ -623,4 +624,71 @@ function rejectCookies(){
     if (cookieBanner) {
         cookieBanner.classList.remove('show');
     }
+}
+
+// Hero slideshow: fades through a list of background images
+function initializeHeroSlideshow() {
+    const hero = document.getElementById('hero');
+    if (!hero) return;
+
+    // Images to show in the slideshow (order matters)
+    const images = [
+        'images/Fassadenansicht_low_res.jpg',
+        'images/Hagelberger_DG_Wohnbereich_quer_low_res.jpg',
+        'images/Hagelberger_EG_quer.jpg',
+        'images/Dachgeschoss.jpg',
+        'images/Hofseite_low_res.jpg'
+    ];
+
+    // Find or create container for slides
+    let slidesContainer = hero.querySelector('.hero-slides');
+    if (!slidesContainer) {
+        slidesContainer = document.createElement('div');
+        slidesContainer.className = 'absolute inset-0 hero-slides';
+        slidesContainer.style.position = 'absolute';
+        slidesContainer.style.inset = '0';
+        slidesContainer.style.overflow = 'hidden';
+        hero.insertBefore(slidesContainer, hero.firstChild);
+    }
+
+    // Clear any existing children (defensive)
+    // We'll append one <img> element per source and simply fade their opacity.
+    slidesContainer.innerHTML = '';
+
+    const imgElements = [];
+
+    // Preload and create DOM <img> elements once so browser won't re-request on each transition
+    images.forEach((src, idx) => {
+        const img = document.createElement('img');
+        img.src = src; // preload and cache
+        img.alt = `Slideshow image ${idx + 1}`;
+        img.style.position = 'absolute';
+        img.style.inset = '0';
+        img.style.width = '100%';
+        img.style.height = '100%';
+        img.style.objectFit = 'cover';
+        img.style.transition = 'opacity 1s ease-in-out';
+        img.style.opacity = '0';
+        img.style.willChange = 'opacity, transform';
+        img.style.zIndex = '0';
+        img.decoding = 'async';
+        slidesContainer.appendChild(img);
+        imgElements.push(img);
+    });
+
+    if (imgElements.length === 0) return;
+
+    // Show the first image
+    let current = 0;
+    imgElements[current].style.opacity = '1';
+
+    const duration = 4000; // ms between transitions
+
+    setInterval(() => {
+        const next = (current + 1) % imgElements.length;
+        // fade in next, fade out current
+        imgElements[next].style.opacity = '1';
+        imgElements[current].style.opacity = '0';
+        current = next;
+    }, duration);
 }
