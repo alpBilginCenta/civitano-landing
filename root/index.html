@@ -6,6 +6,10 @@
     <link rel="alternate" hreflang="de" href="index.html" />
     <link rel="alternate" hreflang="en" href="index_en.html" />
     <link rel="alternate" hreflang="x-default" href="index.html" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-sA+e2H3k/6kXk2m0p3sVbW8bM6Qp1Y9f3p2F8p3yRkM=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-o9N1j8gKkQv6vJp4g1sKk3yQ1t0s5b1Z6+g6b6e1w2M=" crossorigin=""></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Civitano Landingpage</title>
   </head>
@@ -115,6 +119,9 @@
             fürs tägliche Leben, der Hermannplatz für Action: alles super
             angebunden, ohne mitten im Chaos zu landen.
           </p>
+
+          <!-- OpenStreetMap (Leaflet) map -->
+          <div id="map" class="w-full rounded-lg overflow-hidden shadow-md mb-6" style="height:320px"></div>
           <h3 class="text-xl font-light mb-4">
             Top angebunden – egal wie du unterwegs
             bist
@@ -132,7 +139,7 @@
             zum Wohnen.
           </p>
       </div>
-      
+
     </section>
 
     <!-- Grundrisse Section -->

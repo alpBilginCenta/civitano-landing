@@ -12,6 +12,7 @@ function initializeWebsite() {
     initializeModals();
     initializeScrollReveal();
     initializeHeroSlideshow();
+    initializeLocationMap();
     initializeLazyLoading();
 }
 
@@ -691,4 +692,95 @@ function initializeHeroSlideshow() {
         imgElements[current].style.opacity = '0';
         current = next;
     }, duration);
+}
+
+// Initialize OpenStreetMap (Leaflet) map for the location section
+function initializeLocationMap() {
+    const address = 'Bürgerstr. 55, 12347 Berlin';
+    const mapEl = document.getElementById('map');
+    if (!mapEl) return;
+
+    const url = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(address) + '&accept-language=de';
+
+    fetch(url, { headers: { 'Accept': 'application/json' } })
+        .then(res => res.json())
+        .then(data => {
+            if (!data || data.length === 0) {
+                mapEl.innerHTML = '<p class="p-4 text-sm text-gray-600">Karte konnte nicht geladen werden. <a href="https://www.openstreetmap.org/search?query=' + encodeURIComponent(address) + '" target="_blank" rel="noopener">OpenStreetMap öffnen</a></p>';
+                return;
+            }
+
+            const lat = parseFloat(data[0].lat);
+            const lon = parseFloat(data[0].lon);
+
+            // Ensure Leaflet (L) is loaded. If it's not present or script was included later,
+            // attempt to inject Leaflet CSS+JS and wait for it before initialization.
+            ensureLeafletLoaded()
+                .then(() => {
+                    try {
+                        const map = L.map('map', { scrollWheelZoom: false }).setView([lat, lon], 16);
+
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            maxZoom: 19,
+                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        }).addTo(map);
+
+                        const marker = L.marker([lat, lon]).addTo(map);
+                        marker.bindPopup('<strong>Bürgerstr. 55</strong><br>12347 Berlin').openPopup();
+                        console.log('Leaflet map initialized at', lat, lon);
+                    } catch (e) {
+                        console.error('Leaflet map initialization error:', e);
+                        mapEl.innerHTML = '<p class="p-4 text-sm text-gray-600">Karte konnte nicht geladen werden. Bitte öffnen Sie <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener">OpenStreetMap</a>.</p>';
+                    }
+                })
+                .catch((err) => {
+                    console.error('Failed to load Leaflet:', err);
+                    mapEl.innerHTML = '<p class="p-4 text-sm text-gray-600">Karte konnte nicht geladen werden. Bitte öffnen Sie <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener">OpenStreetMap</a>.</p>';
+                });
+        })
+        .catch((e) => {
+            console.error('open street map api error:', e);
+            mapEl.innerHTML = '<p class="p-4 text-sm text-gray-600">Karte konnte nicht geladen werden. Bitte öffnen Sie <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener">OpenStreetMap</a>.</p>';
+        });
+}
+
+// Helper: ensure Leaflet CSS and JS are loaded and the global `L` is available.
+// This is idempotent and will not add duplicate tags.
+function ensureLeafletLoaded() {
+    return new Promise((resolve, reject) => {
+        if (window.L) return resolve();
+
+        // Add CSS if not present
+        const cssHref = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+        if (!document.querySelector('link[href*="leaflet"]')) {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = cssHref;
+            link.crossOrigin = '';
+            document.head.appendChild(link);
+        }
+
+        // If a Leaflet script tag is already present, attach load/error handlers
+        const existingScript = document.querySelector('script[src*="leaflet"]');
+        if (existingScript) {
+            if (window.L) return resolve();
+            // If it's already loaded, resolution will be immediate, otherwise wait
+            existingScript.addEventListener('load', () => {
+                if (window.L) resolve(); else reject(new Error('Leaflet script loaded but global L missing'));
+            });
+            existingScript.addEventListener('error', () => reject(new Error('Failed to load existing Leaflet script')));
+            return;
+        }
+
+        // Otherwise create and append a script tag to load Leaflet
+        const script = document.createElement('script');
+        script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+        script.async = true;
+        script.onload = () => {
+            if (window.L) resolve();
+            else reject(new Error('Leaflet loaded but global L not available'));
+        };
+        script.onerror = () => reject(new Error('Failed to load Leaflet script'));
+        document.head.appendChild(script);
+    });
 }
