@@ -6,10 +6,15 @@
     <link rel="alternate" hreflang="de" href="index.html" />
     <link rel="alternate" hreflang="en" href="index_en.html" />
     <link rel="alternate" hreflang="x-default" href="index.html" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-      crossorigin="" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-      crossorigin=""></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      crossorigin=""
+    ></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Civitano Landingpage</title>
   </head>
@@ -31,7 +36,13 @@
       />
       <!-- Language selector -->
       <div class="ml-auto">
-        <a href="index_en.html" class="inline-flex items-center px-3 py-2 rounded text-sm uppercase tracking-wide text-white hover:underline" aria-label="Switch to English" hreflang="en">EN</a>
+        <a
+          href="index_en.html"
+          class="inline-flex items-center px-3 py-2 rounded text-sm uppercase tracking-wide text-white hover:underline"
+          aria-label="Switch to English"
+          hreflang="en"
+          >EN</a
+        >
       </div>
     </header>
 
@@ -41,8 +52,13 @@
     >
       <!-- Slideshow layers (inserted here so overlay/content sit above) -->
       <div class="absolute inset-0 hero-slides" aria-hidden="true">
-         <!--<div class="hero-slide" style="background-image: url('images/Fassadenansicht_low_res.jpg')"></div>-->
-        <div class="hero-slide" style="background-image: url('images/Hagelberger_DG_Wohnbereich_quer_low_res.jpg')"></div>
+        <!--<div class="hero-slide" style="background-image: url('images/Fassadenansicht_low_res.jpg')"></div>-->
+        <div
+          class="hero-slide"
+          style="
+            background-image: url('images/Hagelberger_DG_Wohnbereich_quer_low_res.jpg');
+          "
+        ></div>
       </div>
 
       <div class="absolute inset-0 bg-black/50"></div>
@@ -93,53 +109,61 @@
         moderne Architektur, harmonische Wohnatmophäre und solide Bauqualität!
       </p>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="p-6 border rounded-lg shadow-sm">2–4 Zimmer Wohnungen</div>
-        <div class="p-6 border rounded-lg shadow-sm">
-          Garten- & Balkonwohnungen
-        </div>
-        <div class="p-6 border rounded-lg shadow-sm">Tiefgarage & Aufzug</div>
+        <a href="images/Etage.png" class="text-center lightbox-link">
+          <div class="p-6 border rounded-lg shadow-sm">
+            2–4 Zimmer Wohnungen
+          </div>
+        </a>
+        <a href="images/Erdgeschoss.jpg" class="text-center lightbox-link">
+          <div class="p-6 border rounded-lg shadow-sm">
+            Garten- & Balkonwohnungen
+          </div>
+        </a>
+        <a href="images/Tiefgarage.jpg" class="text-center lightbox-link">
+          <div class="p-6 border rounded-lg shadow-sm">Tiefgarage & Aufzug</div>
+        </a>
       </div>
     </section>
     <!-- Lage Section -->
     <section class="py-20 max-w-6xl mx-auto px-6">
-        <div class="text-center">
-          <h2 class="text-3xl font-light mb-4">
-            Mittendrin statt nebenan – Zuhause zwischen Neukölln & Britz
-          </h2>
-          <p class="text-gray-700 mb-4">
-            CIVITANO liegt dort, wo Berlin gerade am spannendsten ist: am
-            Übergang von Neukölln zu Britz. Urban, lebendig, international –
-            aber eine Ecke ruhiger als der klassische Neukölln-Trubel. Perfekt
-            für alle, die hier angekommen sind und jetzt ihren eigenen Platz
-            suchen.
-          </p>
-          <p class="text-gray-700 mb-4">
-            Restaurants, Spätis, Cafés, Spielplätze, Parks, Kitas – alles in
-            Laufweite. Der Teltowkanal für die Abendrunde, die Hermannstraße
-            fürs tägliche Leben, der Hermannplatz für Action: alles super
-            angebunden, ohne mitten im Chaos zu landen.
-          </p>
+      <div class="text-center">
+        <h2 class="text-3xl font-light mb-4">
+          Mittendrin statt nebenan – Zuhause zwischen Neukölln & Britz
+        </h2>
+        <p class="text-gray-700 mb-4">
+          CIVITANO liegt dort, wo Berlin gerade am spannendsten ist: am Übergang
+          von Neukölln zu Britz. Urban, lebendig, international – aber eine Ecke
+          ruhiger als der klassische Neukölln-Trubel. Perfekt für alle, die hier
+          angekommen sind und jetzt ihren eigenen Platz suchen.
+        </p>
+        <p class="text-gray-700 mb-4">
+          Restaurants, Spätis, Cafés, Spielplätze, Parks, Kitas – alles in
+          Laufweite. Der Teltowkanal für die Abendrunde, die Hermannstraße fürs
+          tägliche Leben, der Hermannplatz für Action: alles super angebunden,
+          ohne mitten im Chaos zu landen.
+        </p>
 
-          <!-- OpenStreetMap (Leaflet) map -->
-          <div id="map" class="w-full rounded-lg overflow-hidden shadow-md mb-6" style="height:320px"></div>
-          <h3 class="text-xl font-light mb-4">
-            Top angebunden – egal wie du unterwegs
-            bist
-          </h3>
-          <ul class="text-sm text-gray-700 space-y-1 mb-4">
-            <li>• A100-Parkdeck/Grünanlage – 150 m</li>
-            <li>• Teltowkanal – 400 m</li>
-            <li>• S+U Hermannstraße – 650 m</li>
-            <li>• Tempelhofer Feld – 2 km</li>
-            <li>• Hermannplatz – 3 km</li>
-            <li>• Oberbaumbrücke – 5,5 km</li>
-          </ul>
-          <p class="text-sm text-gray-600">
-            Kurz gesagt: Urban genug zum Leben, ruhig genug
-            zum Wohnen.
-          </p>
+        <!-- OpenStreetMap (Leaflet) map -->
+        <div
+          id="map"
+          class="w-full rounded-lg overflow-hidden shadow-md mb-6"
+          style="height: 320px"
+        ></div>
+        <h3 class="text-xl font-light mb-4">
+          Top angebunden – egal wie du unterwegs bist
+        </h3>
+        <ul class="text-sm text-gray-700 space-y-1 mb-4">
+          <li>• A100-Parkdeck/Grünanlage – 150 m</li>
+          <li>• Teltowkanal – 400 m</li>
+          <li>• S+U Hermannstraße – 650 m</li>
+          <li>• Tempelhofer Feld – 2 km</li>
+          <li>• Hermannplatz – 3 km</li>
+          <li>• Oberbaumbrücke – 5,5 km</li>
+        </ul>
+        <p class="text-sm text-gray-600">
+          Kurz gesagt: Urban genug zum Leben, ruhig genug zum Wohnen.
+        </p>
       </div>
-
     </section>
 
     <!-- Grundrisse Section -->
@@ -270,7 +294,9 @@
 
     <!-- Partner Band -->
     <section class="py-6 bg-[#f3eee7]">
-      <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-center gap-4 text-sm text-gray-700">
+      <div
+        class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-center gap-4 text-sm text-gray-700"
+      >
         <nav aria-label="Footer Navigation" class="flex gap-4">
           <a href="Datenschutz.html" class="hover:underline">** Datenschutz</a>
           <span class="text-gray-400">·</span>
@@ -287,7 +313,6 @@
         </p>
       </div>
     </section>
-
 
     <script src="js/script.js"></script>
   </body>

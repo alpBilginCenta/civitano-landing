@@ -11,6 +11,7 @@ function initializeWebsite() {
     initializeFormHandling();
     initializeModals();
     initializeScrollReveal();
+    initializeLightbox();
     initializeHeroSlideshow();
     initializeLocationMap();
     initializeLazyLoading();
@@ -692,6 +693,139 @@ function initializeHeroSlideshow() {
         imgElements[current].style.opacity = '0';
         current = next;
     }, duration);
+}
+
+// Lightbox: open assets (images & PDFs) in an overlay instead of navigating away
+function initializeLightbox() {
+    // Create overlay elements once
+    let overlay = document.getElementById('global-lightbox-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'global-lightbox-overlay';
+        overlay.setAttribute('role', 'dialog');
+        overlay.setAttribute('aria-modal', 'true');
+        overlay.style.position = 'fixed';
+        overlay.style.inset = '0';
+        overlay.style.background = 'rgba(0,0,0,0.85)';
+        overlay.style.display = 'none';
+        overlay.style.alignItems = 'center';
+        overlay.style.justifyContent = 'center';
+        overlay.style.zIndex = '10050';
+        overlay.style.padding = '20px';
+        overlay.style.boxSizing = 'border-box';
+
+        const container = document.createElement('div');
+        container.id = 'global-lightbox-container';
+        container.style.maxWidth = '1100px';
+        container.style.width = '100%';
+        container.style.maxHeight = '90%';
+        container.style.overflow = 'auto';
+        container.style.position = 'relative';
+        overlay.appendChild(container);
+
+        const closeBtn = document.createElement('button');
+        closeBtn.id = 'global-lightbox-close';
+        closeBtn.innerHTML = '✕';
+        closeBtn.setAttribute('aria-label', 'Schließen');
+        closeBtn.style.position = 'absolute';
+        closeBtn.style.top = '8px';
+        closeBtn.style.right = '8px';
+        closeBtn.style.background = 'rgba(255,255,255,0.08)';
+        closeBtn.style.color = 'white';
+        closeBtn.style.border = 'none';
+        closeBtn.style.width = '40px';
+        closeBtn.style.height = '40px';
+        closeBtn.style.borderRadius = '6px';
+        closeBtn.style.cursor = 'pointer';
+        closeBtn.style.fontSize = '20px';
+        closeBtn.style.lineHeight = '1';
+        container.appendChild(closeBtn);
+
+        // Caption area
+        const caption = document.createElement('div');
+        caption.id = 'global-lightbox-caption';
+        caption.style.color = '#ddd';
+        caption.style.fontSize = '14px';
+        caption.style.marginTop = '8px';
+        caption.style.textAlign = 'center';
+        overlay.appendChild(caption);
+
+        // Close on click outside container
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) {
+                closeLightbox();
+            }
+        });
+
+        closeBtn.addEventListener('click', closeLightbox);
+
+        document.body.appendChild(overlay);
+    }
+
+    // Helper to open and close
+    function openLightbox(href, title) {
+        const container = document.getElementById('global-lightbox-container');
+        const caption = document.getElementById('global-lightbox-caption');
+        // Clear container children except close button
+        Array.from(container.children).forEach(child => {
+            if (child.id !== 'global-lightbox-close') child.remove();
+        });
+
+        const lowerHref = href.toLowerCase();
+        if (lowerHref.endsWith('.pdf')) {
+            const iframe = document.createElement('iframe');
+            iframe.src = href;
+            iframe.style.width = '100%';
+            iframe.style.height = '80vh';
+            iframe.style.border = 'none';
+            container.appendChild(iframe);
+        } else {
+            const img = document.createElement('img');
+            img.src = href;
+            img.alt = title || '';
+            img.style.maxWidth = '100%';
+            img.style.maxHeight = '80vh';
+            img.style.display = 'block';
+            img.style.margin = '0 auto';
+            container.appendChild(img);
+        }
+
+        caption.textContent = title || href.split('/').pop();
+
+        overlay.style.display = 'flex';
+        // trap focus
+        overlay.tabIndex = -1;
+        overlay.focus();
+
+        // prevent background scrolling
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+        const overlay = document.getElementById('global-lightbox-overlay');
+        if (!overlay) return;
+        overlay.style.display = 'none';
+        document.body.style.overflow = '';
+        const caption = document.getElementById('global-lightbox-caption');
+        if (caption) caption.textContent = '';
+    }
+
+    // Close on Esc
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeLightbox();
+    });
+
+    // Attach handlers to links with the class 'lightbox-link'
+    document.querySelectorAll('a.lightbox-link').forEach(a => {
+        // ensure link opens in lightbox
+        a.addEventListener('click', (e) => {
+            e.preventDefault();
+            const href = a.getAttribute('href');
+            const title = a.getAttribute('aria-label') || a.getAttribute('title') || '';
+            if (!href) return;
+            openLightbox(href, title);
+        });
+    });
 }
 
 // Initialize OpenStreetMap (Leaflet) map for the location section
