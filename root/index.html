@@ -18,7 +18,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Civitano Landingpage</title>
   </head>
-  <body class="font-sans bg-[#f3eee7] text-gray-900">
+  <body class="font-sans bg-gray-100 text-gray-900">
     <!-- Hero Section -->
     <header
       class="absolute top-0 left-0 w-full z-20 flex justify-start items-center px-8 py-6"
@@ -85,7 +85,7 @@
 
     <!-- Gallery Section -->
     <!-- 
-  <section class="py-20 max-w-6xl mx-auto px-6">
+  <section class="pt-20 max-w-6xl mx-auto px-6">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <img src="images/WE04.jpg" alt="Innenansicht" class="rounded-lg shadow-md object-cover h-72 w-full" />
       <img src="images/WE05.jpg" alt="Innenansicht" class="rounded-lg shadow-md object-cover h-72 w-full" />
@@ -94,7 +94,7 @@
   </section>
 -->
     <!-- Highlights Section -->
-    <section class="py-20 max-w-6xl mx-auto px-6 text-center">
+    <section class="pt-20 max-w-6xl mx-auto px-6 text-center">
       <h2 class="text-3xl font-light mb-6">
         Living New Berlin – moderne Wohnungen zwischen Neukölln & Britz.
       </h2>
@@ -109,23 +109,23 @@
         moderne Architektur, harmonische Wohnatmophäre und solide Bauqualität!
       </p>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <a href="images/Etage.png" class="text-center lightbox-link">
+        <a href="images/Etage.png" class="text-center lightbox-link bg-[#f3eee7]">
           <div class="p-6 border rounded-lg shadow-sm">
             2–4 Zimmer Wohnungen
           </div>
         </a>
-        <a href="images/Erdgeschoss.jpg" class="text-center lightbox-link">
+        <a href="images/Erdgeschoss.jpg" class="text-center lightbox-link bg-[#f3eee7]">
           <div class="p-6 border rounded-lg shadow-sm">
             Garten- & Balkonwohnungen
           </div>
         </a>
-        <a href="images/Tiefgarage.jpg" class="text-center lightbox-link">
+        <a href="images/Tiefgarage.jpg" class="text-center lightbox-link bg-[#f3eee7]">
           <div class="p-6 border rounded-lg shadow-sm">Tiefgarage & Aufzug</div>
         </a>
       </div>
     </section>
     <!-- Lage Section -->
-    <section class="py-20 max-w-6xl mx-auto px-6">
+    <section class="pt-20 max-w-6xl mx-auto px-6">
       <div class="text-center">
         <h2 class="text-3xl font-light mb-4">
           Mittendrin statt nebenan – Zuhause zwischen Neukölln & Britz
@@ -167,7 +167,7 @@
     </section>
 
     <!-- Grundrisse Section -->
-    <section id="grundrisse" class="py-20 max-w-6xl mx-auto px-6">
+    <section id="grundrisse" class="pt-20 max-w-6xl mx-auto px-6">
       <h2 class="text-3xl font-light text-center mb-10">
         Ausgewählte Grundrisse
       </h2>
@@ -213,7 +213,7 @@
     </section>
 
     <!-- CTA Section -->
-    <section id="kontakt" class="py-20 bg-gray-100">
+    <section id="kontakt" class="pt-20 bg-gray-100">
       <div class="max-w-3xl mx-auto px-6">
         <h3 class="text-2xl font-light mb-2 text-center">
           Jetzt Exposé erhalten
@@ -228,42 +228,42 @@
         >
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input
-              class="border p-3 rounded"
+              class="border p-3 rounded bg-gray-100"
               placeholder="Vorname *"
               id="vorname"
               name="vorname"
               required
             />
             <input
-              class="border p-3 rounded"
+              class="border p-3 rounded bg-gray-100"
               placeholder="Nachname *"
               id="nachname"
               name="nachname"
               required
             />
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-100">
             <input
               type="email"
-              class="border p-3 rounded"
+              class="border p-3 rounded bg-gray-100"
               placeholder="E-Mail *"
               id="email"
               name="email"
               required
             />
             <input
-              class="border p-3 rounded"
+              class="border p-3 rounded bg-gray-100"
               placeholder="Telefon"
               id="telefon"
               name="telefon"
             />
           </div>
-          <select class="border p-3 rounded">
+          <select class="border p-3 rounded bg-gray-100" id="interesse" name="interesse">
             <option>Ich bin Eigennutzer</option>
             <option>Ich bin Kapitalanleger</option>
           </select>
           <textarea
-            class="border p-3 rounded min-h-[120px]"
+            class="border p-3 rounded bg-gray-100 min-h-[120px]"
             placeholder="Ihre Nachricht"
             id="message"
             name="message"
