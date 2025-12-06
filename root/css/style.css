@@ -1,5 +1,10 @@
-  @media (max-width: 767px) {
+@media (max-width: 767px) {
   header {
     position: static !important;
   }
+}
+
+.my-font-sans {
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
