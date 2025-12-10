@@ -1,4 +1,4 @@
-
+let lang = 'de';
 // DOM Content Loaded Event
 document.addEventListener('DOMContentLoaded', function() {
     initializeWebsite();
@@ -15,6 +15,7 @@ function initializeWebsite() {
     initializeHeroSlideshow();
     initializeLocationMap();
     initializeLazyLoading();
+   lang = document.documentElement.lang;
 }
 
 // Navigation functionality
@@ -166,7 +167,11 @@ function initializeFormHandling() {
             }
 
             if (!isValid) {
-                showNotification('Bitte füllen Sie alle Pflichtfelder korrekt aus.', 'error');
+                if(lang === 'en'){
+                    showNotification('Please fill out all required fields correctly.', 'error');
+                } else {
+                    showNotification('Bitte füllen Sie alle Pflichtfelder korrekt aus.', 'error');
+                }
                 return;
             }
 
@@ -188,17 +193,29 @@ function initializeFormHandling() {
                 submitButton.disabled = false;
                 submitButton.innerHTML = originalText;
                 if (response.ok) {
-                    showNotification('Vielen Dank für Ihre Anfrage! Wir melden uns in Kürze bei Ihnen.', 'success');
+                    if(lang === 'en'){
+                        showNotification('Thank you for your inquiry! We will get back to you shortly.', 'success');
+                    } else {
+                        showNotification('Vielen Dank für Ihre Anfrage! Wir melden uns in Kürze bei Ihnen.', 'success');
+                    }
                     contactForm.reset();
                 } else {
-                    showNotification('Fehler beim Senden des Formulars. Bitte versuchen Sie es erneut.', 'error');
+                    if(lang === 'en'){
+                        showNotification('Error submitting the form. Please try again.', 'error');
+                    } else {
+                        showNotification('Fehler beim Senden des Formulars. Bitte versuchen Sie es erneut.', 'error');
+                    }
                 }
                 console.log('Form submitted:', formObject);
             })
             .catch(error => {
                 submitButton.disabled = false;
                 submitButton.innerHTML = originalText;
-                showNotification('Netzwerkfehler. Bitte versuchen Sie es später erneut.', 'error');
+                if(lang === 'en'){  
+                    showNotification('Network error. Please try again later.', 'error');
+                } else {
+                    showNotification('Netzwerkfehler. Bitte versuchen Sie es später erneut.', 'error');
+                }
                 console.error('Form submission error:', error);
             });
         });
