@@ -612,7 +612,7 @@ window.copyToClipboard = copyToClipboard;
 function acceptCookies () {
     const noscript = document.createElement('noscript');
     noscript.innerHTML = `<iframe
-        src="https://www.googletagmanager.com/ns.html?id=GTM-NFTRGWRR"
+        src="https://www.googletagmanager.com/ns.html?id=GTM-P87H2RTP"
         height="0"
         width="0"
         style="display: none; visibility: hidden">
@@ -630,7 +630,7 @@ function acceptCookies () {
         j.async = true;
         j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
         f.parentNode.insertBefore(j, f);
-      })(window, document, "script", "dataLayer", "GTM-NFTRGWRR");
+      })(window, document, "script", "dataLayer", "GTM-P87H2RTP");
 
           const cookieBanner = document.getElementById('cookieBanner');
     if (cookieBanner) {
