@@ -3,3 +3,7 @@
         Require method POST
     </RequireAll>
 </Files>
+
+<Files "smtp-config.php">
+    Require all denied
+</Files>

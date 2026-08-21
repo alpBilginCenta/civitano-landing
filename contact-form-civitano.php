@@ -4,64 +4,34 @@ declare(strict_types=1);
 
 header('Content-Type: application/json; charset=utf-8');
 
-function getEnvFilePath(): string
+function getConfigPath(): string
 {
-    return '/home/cz3i0p7j5_ssh/.env';
+    return __DIR__ . '/smtp-config.php';
 }
 
-function loadDotEnv(string $path): void
+function loadConfig(): array
 {
-    if (!file_exists($path)) {
-        throw new RuntimeException(".env file not found at: {$path}");
+    $configPath = getConfigPath();
+
+    if (!file_exists($configPath)) {
+        throw new RuntimeException("SMTP config file not found at: {$configPath}");
     }
 
-    if (!is_file($path)) {
-        throw new RuntimeException("Path exists but is not a regular file: {$path}");
+    $config = require $configPath;
+    if (!is_array($config)) {
+        throw new RuntimeException('SMTP config file did not return an array.');
     }
 
-    if (!is_readable($path)) {
-        $permissionBits = @fileperms($path);
-        $formattedPermissions = $permissionBits !== false ? decoct($permissionBits & 0777) : 'unknown';
-
-        throw new RuntimeException(
-            ".env file exists but is not readable by PHP. Path: {$path}. Permissions: {$formattedPermissions}. " .
-            'This usually means the file owner or permissions do not match the web server user.'
-        );
-    }
-
-    $lines = @file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    if ($lines === false) {
-        throw new RuntimeException('Unable to read .env file: ' . $path);
-    }
-
-    foreach ($lines as $line) {
-        $trimmed = trim($line);
-        if ($trimmed === '' || str_starts_with($trimmed, '#') || str_starts_with($trimmed, ';')) {
-            continue;
-        }
-
-        if (preg_match('/^(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)=(.*)$/', $trimmed, $matches) !== 1) {
-            continue;
-        }
-
-        $key = $matches[1];
-        $value = trim($matches[2]);
-
-        if (preg_match('/^"(.*)"$/s', $value, $quotedValues) === 1 || preg_match("/^'(.*)'$/s", $value, $quotedValues) === 1) {
-            $value = $quotedValues[1];
-        } else {
-            $value = preg_replace('/\s+#.*$/', '', $value);
-            $value = trim($value);
-        }
-
-        $_ENV[$key] = $value;
-        $_SERVER[$key] = $value;
-        putenv("{$key}={$value}");
-    }
+    return $config;
 }
 
 try {
-    loadDotEnv(getEnvFilePath());
+    $config = loadConfig();
+    foreach ($config as $key => $value) {
+        $_ENV[$key] = (string) $value;
+        $_SERVER[$key] = (string) $value;
+        putenv("{$key}=" . (string) $value);
+    }
 } catch (Throwable $exception) {
     sendJson(500, [
         'success' => false,
