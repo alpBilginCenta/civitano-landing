@@ -9,22 +9,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install build dependencies
-        run: npm ci
-
-      - name: Build bilingual pages (generates /en/ and /de/)
-        run: npm run build
-
-      # Everything below runs on GitHub's runner, not the hosting
-      # account. The server only receives already-built static files
-      # over SFTP and never executes any build tooling itself.
-      - name: Deploy to one.com via rsync
+      - name: Deploy full repository to one.com via rsync
         env:
           SSH_HOST: ${{ secrets.ONECOM_HOST }}
           SSH_USER: ${{ secrets.ONECOM_USERNAME }}
@@ -33,16 +21,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y sshpass rsync
 
-          # Sync only the built static site and public assets.
-          # This avoids mirror-style recursion into repository metadata.
           sshpass -p "$SSH_PASSWORD" rsync -az --delete \
-            --exclude='/.git/' \
-            --exclude='/.github/' \
-            --exclude='/.gitignore' \
-            --exclude='/node_modules/' \
-            --exclude='/scripts/' \
-            --exclude='/package.json' \
-            --exclude='/package-lock.json' \
-            --exclude='/index-src.html' \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='.gitignore' \
             -e "ssh -o StrictHostKeyChecking=no" \
             ./ "$SSH_USER@$SSH_HOST:/www/"
