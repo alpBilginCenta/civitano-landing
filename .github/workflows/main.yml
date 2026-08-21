@@ -28,4 +28,4 @@ jobs:
             --exclude='.gitignore' \
             --exclude='.github/' \
             -e "ssh -o StrictHostKeyChecking=no" \
-            ./ "$SSH_USER@$SSH_HOST:/www/"
+            ./ "$SSH_USER@$SSH_HOST:/run/www/"
