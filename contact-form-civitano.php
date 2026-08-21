@@ -79,16 +79,8 @@ function sendSmtpEmail(string $htmlBody): void
         throw new RuntimeException('Missing SMTP configuration. Set EXCHANGE_HOST, EXCHANGE_PORT, EXCHANGE_EMAIL_CIVITANO, EXCHANGE_PASSWORD_CIVITANO and RECIPIENT_ADDRESS.');
     }
 
-    $connectionString = 'ssl://' . $host . ':' . $port;
-    $context = stream_context_create([
-        'ssl' => [
-            'verify_peer' => false,
-            'verify_peer_name' => false,
-            'allow_self_signed' => true,
-        ],
-    ]);
-
-    $socket = @stream_socket_client($connectionString, $errno, $errstr, 30, STREAM_CLIENT_CONNECT, $context);
+    $connectionString = 'tcp://' . $host . ':' . $port;
+    $socket = @stream_socket_client($connectionString, $errno, $errstr, 30, STREAM_CLIENT_CONNECT);
     if ($socket === false) {
         throw new RuntimeException(sprintf('SMTP connection failed: %s (%d)', $errstr, $errno));
     }
@@ -110,6 +102,30 @@ function sendSmtpEmail(string $htmlBody): void
             fclose($socket);
             throw new RuntimeException('SMTP server rejected EHLO/HELO: ' . $response);
         }
+    }
+
+    fwrite($socket, "STARTTLS\r\n");
+    $response = readSmtpResponse($socket);
+    if (strncmp($response, '220', 3) !== 0) {
+        fclose($socket);
+        throw new RuntimeException('SMTP STARTTLS not accepted: ' . $response);
+    }
+
+    stream_context_set_option($socket, 'ssl', 'verify_peer', false);
+    stream_context_set_option($socket, 'ssl', 'verify_peer_name', false);
+    stream_context_set_option($socket, 'ssl', 'allow_self_signed', true);
+    stream_context_set_option($socket, 'ssl', 'crypto_method', STREAM_CRYPTO_METHOD_TLS_CLIENT);
+
+    if (!stream_socket_enable_crypto($socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
+        fclose($socket);
+        throw new RuntimeException('SMTP TLS upgrade failed.');
+    }
+
+    fwrite($socket, "EHLO " . gethostname() . "\r\n");
+    $response = readSmtpResponse($socket);
+    if (strncmp($response, '250', 3) !== 0) {
+        fclose($socket);
+        throw new RuntimeException('SMTP server rejected EHLO after TLS upgrade: ' . $response);
     }
 
     fwrite($socket, "AUTH LOGIN\r\n");
