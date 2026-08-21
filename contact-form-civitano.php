@@ -6,7 +6,7 @@ header('Content-Type: application/json; charset=utf-8');
 
 function getConfigPath(): string
 {
-    return __DIR__ . '/smtp-config.php';
+    return __DIR__ . '/env.php';
 }
 
 function loadConfig(): array

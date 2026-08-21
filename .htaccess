@@ -4,6 +4,6 @@
     </RequireAll>
 </Files>
 
-<Files "smtp-config.php">
+<Files "env.php">
     Require all denied
 </Files>
