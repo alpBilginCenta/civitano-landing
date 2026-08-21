@@ -1,3 +1,5 @@
-<FilesMatch "test">
-    Require all denied
-</FilesMatch>
+<Files "contact-form-civitano.php">
+    <RequireAll>
+        Require method POST
+    </RequireAll>
+</Files>
