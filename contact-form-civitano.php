@@ -6,20 +6,13 @@ header('Content-Type: application/json; charset=utf-8');
 
 function getEnvFilePath(): string
 {
-    $currentDir = __DIR__;
-    $parentDir = dirname($currentDir);
-
-    if (basename($currentDir) === 'www') {
-        return $parentDir . '/.env';
-    }
-
-    return $currentDir . '/.env';
+    return '/home/cz3i0p7j5_ssh/.env';
 }
 
 function loadDotEnv(string $path): void
 {
     if (!is_file($path)) {
-        throw new RuntimeException('Missing .env file at: ' . $path . '. Expected the file to exist one directory above the public www folder.');
+        throw new RuntimeException('Missing .env file. Expected the file to exist one directory above the public www folder.');
     }
 
     $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
