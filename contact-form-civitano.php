@@ -11,11 +11,25 @@ function getEnvFilePath(): string
 
 function loadDotEnv(string $path): void
 {
-    if (!is_file($path)) {
-        throw new RuntimeException('Missing .env file. Expected the file to exist one directory above the public www folder.');
+    if (!file_exists($path)) {
+        throw new RuntimeException(".env file not found at: {$path}");
     }
 
-    $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    if (!is_file($path)) {
+        throw new RuntimeException("Path exists but is not a regular file: {$path}");
+    }
+
+    if (!is_readable($path)) {
+        $permissionBits = @fileperms($path);
+        $formattedPermissions = $permissionBits !== false ? decoct($permissionBits & 0777) : 'unknown';
+
+        throw new RuntimeException(
+            ".env file exists but is not readable by PHP. Path: {$path}. Permissions: {$formattedPermissions}. " .
+            'This usually means the file owner or permissions do not match the web server user.'
+        );
+    }
+
+    $lines = @file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     if ($lines === false) {
         throw new RuntimeException('Unable to read .env file: ' . $path);
     }
