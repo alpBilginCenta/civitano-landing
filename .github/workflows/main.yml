@@ -21,11 +21,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y sshpass rsync
 
-          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" "test -d /run/www || { echo 'Remote /www does not exist'; exit 1; }"
+          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" "test -d /run/webroots/d96d96f4 || { echo 'Remote /run/webroots/d96d96f4 does not exist'; exit 1; }"
 
           sshpass -p "$SSH_PASSWORD" rsync -az --delete \
             --exclude='.git/' \
             --exclude='.gitignore' \
             --exclude='.github/' \
             -e "ssh -o StrictHostKeyChecking=no" \
-            ./ "$SSH_USER@$SSH_HOST:/run/www/"
+            ./ "$SSH_USER@$SSH_HOST:/run/webroots/d96d96f4"
