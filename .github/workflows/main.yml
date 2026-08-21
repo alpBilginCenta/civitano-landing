@@ -3,7 +3,7 @@ name: Deploy to one.com
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:
@@ -21,9 +21,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y sshpass rsync
 
+          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" "test -d /www || { echo 'Remote /www does not exist'; exit 1; }"
+
           sshpass -p "$SSH_PASSWORD" rsync -az --delete \
             --exclude='.git/' \
-            --exclude='.github/' \
             --exclude='.gitignore' \
+            --exclude='.github/' \
             -e "ssh -o StrictHostKeyChecking=no" \
             ./ "$SSH_USER@$SSH_HOST:/www/"
