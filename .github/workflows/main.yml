@@ -27,5 +27,6 @@ jobs:
             --exclude='.git/' \
             --exclude='.gitignore' \
             --exclude='.github/' \
+            --exclude='env.php' \
             -e "ssh -o StrictHostKeyChecking=no" \
             ./ "$SSH_USER@$SSH_HOST:/run/webroots/d96d96f4"

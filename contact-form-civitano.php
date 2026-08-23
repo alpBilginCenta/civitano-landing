@@ -189,6 +189,53 @@ function sendSmtpEmail(string $htmlBody): void
     fclose($socket);
 }
 
+function sendResendEmail(string $htmlBody): void
+{
+    $apiKey = getenv('RESEND_API_KEY') ?: $_ENV['RESEND_API_KEY'] ?? '';
+    $from = getenv('EXCHANGE_EMAIL_CIVITANO') ?: $_ENV['EXCHANGE_EMAIL_CIVITANO'] ?? '';
+    $recipient = getenv('RECIPIENT_ADDRESS') ?: $_ENV['RECIPIENT_ADDRESS'] ?? '';
+
+    if ($apiKey === '' || $from === '' || $recipient === '') {
+        throw new RuntimeException('Missing Resend configuration. Set RESEND_API_KEY, EXCHANGE_EMAIL_CIVITANO and RECIPIENT_ADDRESS.');
+    }
+
+    $payload = [
+        'from' => $from,
+        'to' => [$recipient],
+        'subject' => 'CIVITANO',
+        'html' => $htmlBody,
+    ];
+
+    $ch = curl_init('https://api.resend.com/emails');
+    if ($ch === false) {
+        throw new RuntimeException('Failed to initialize Resend request.');
+    }
+
+    curl_setopt_array($ch, [
+        CURLOPT_POST => true,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTPHEADER => [
+            'Authorization: Bearer ' . $apiKey,
+            'Content-Type: application/json',
+        ],
+        CURLOPT_POSTFIELDS => json_encode($payload, JSON_UNESCAPED_SLASHES),
+    ]);
+
+    $responseBody = curl_exec($ch);
+    $httpCode = (int) curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+    $curlError = curl_error($ch);
+    curl_close($ch);
+
+    if ($responseBody === false) {
+        throw new RuntimeException('Resend request failed: ' . $curlError);
+    }
+
+    if ($httpCode < 200 || $httpCode >= 300) {
+        throw new RuntimeException('Resend API error (' . $httpCode . '): ' . $responseBody);
+    }
+}
+
 function getFormValue(string $key, string $fallback = ''): string
 {
     if (isset($_POST[$key])) {
@@ -264,7 +311,7 @@ try {
 </html>
 HTML;
 
-    sendSmtpEmail($htmlBody);
+    sendResendEmail($htmlBody);
 
     sendJson(200, ['success' => true]);
 } catch (Throwable $exception) {
