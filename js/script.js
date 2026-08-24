@@ -194,7 +194,8 @@ function initializeFormHandling() {
             submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Wird gesendet...';
 
             fetch(
-                'https://invest-pflege.azurewebsites.net/api/contact-form-civitano'
+                'https://civitano-berlin.com/contact-form-civitano.php'
+                //'https://invest-pflege.azurewebsites.net/api/contact-form-civitano'
                 //'http://localhost:7071/api/contact-form'
                 , {
                 method: 'POST',
